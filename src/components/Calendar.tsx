@@ -10,9 +10,7 @@ import {
   endOfWeek,
   eachDayOfInterval,
   isToday,
-  isSameDay,
 } from "date-fns";
-import { Header } from "./Header";
 import { EventModal } from "./EventModal";
 
 export type Event = {
@@ -28,13 +26,6 @@ export const Calendar = () => {
   const [modalVisible, setModalVisible] = useState(false); // 現在のイベント（編集中または新規作成中）の状態
   const [currentEvent, setCurrentEvent] = useState({ title: "", date: "" }); // カレンダーの日付を変更する関数
   const [viewMode, setViewMode] = useState("month"); // "month" または "week" で表示モードを管理
-
-  const daysInMonth = () => {
-    // その月の全ての日を計算する関数
-    const startDay = startOfWeek(startOfMonth(currentMonth));
-    const endDay = endOfWeek(endOfMonth(currentMonth));
-    return eachDayOfInterval({ start: startDay, end: endDay });
-  };
 
   const saveEvent = (newEvent: Event) => {
     // 予定を追加または更新する関数
@@ -84,28 +75,33 @@ export const Calendar = () => {
 
   return (
     <>
-      <Header />
-      <div className="flex justify-center items-center">
-        <button className="me-5" onClick={() => setViewMode("week")}>
-          【 週表示 】
+      <div className="flex justify-end me-16">
+        <select
+          className="bg-black border border-gray-300 rounded-md p-2"
+          value={viewMode}
+          onChange={(e) => setViewMode(e.target.value)}
+        >
+          <option value="month">月</option>
+          <option value="week">週</option>
+        </select>
+      </div>
+      <div className="flex justify-start ms-24 text-xl">
+        <span className="me-8">{format(currentMonth, "yyyy年MM月")}</span>
+        <button
+          className="me-6 "
+          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+        >
+          ＜
         </button>
-        <button onClick={() => setViewMode("month")}>【 月表示 】</button>
+        <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
+          ＞
+        </button>
       </div>
       <div className="flex flex-col items-center">
-        <div className="flex justify-between items-center w-full max-w-4xl p-4 shadow-md">
-          <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
-            ＜
-          </button>
-          <span>{format(currentMonth, "yyyy年MM月")}</span>
-          <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
-            ＞
-          </button>
-        </div>
-
-        <div className="grid grid-cols-7 gap-4 w-full max-w-4xl">
+        <div className="grid grid-cols-7 gap-2 w-full max-w-7xl">
           {/* 曜日の表示 */}
           {dayOfWeek.map((day, index) => (
-            <div key={index} className="text-center">
+            <div key={index} className="text-center me-5">
               {day}
             </div>
           ))}
@@ -119,13 +115,15 @@ export const Calendar = () => {
                 <div
                   key={index}
                   className={`text-left p-2 rounded bg-white max-w-[160px] min-h-[85px] ${
-                    isToday(day) ? "bg-blue-400" : "text-gray-500"
+                    isToday(day)
+                      ? "text-green-500 text-xl border-4 border-green-500"
+                      : "text-gray-500"
                   }`}
                   onClick={() => openModal(dayStr)} // クリックしたらモーダルを開く
                 >
                   {format(day, "d")}
                   {dayEvent && ( // イベントがあれば表示
-                    <div className="text-sm mt-2 text-blue-500">
+                    <div className="text-sm mt-2 text-black">
                       {dayEvent.title}
                     </div>
                   )}
@@ -141,13 +139,15 @@ export const Calendar = () => {
                 <div
                   key={index}
                   className={`text-left p-2 rounded bg-white max-w-[160px] min-h-[500px] ${
-                    isToday(day) ? "bg-blue-400" : "text-gray-500"
+                    isToday(day)
+                      ? "text-green-500 text-xl border-4 border-green-500"
+                      : "text-gray-500"
                   }`}
                   onClick={() => openModal(dayStr)}
                 >
                   {format(day, "d")}
                   {dayEvent && (
-                    <div className="text-sm mt-2 text-blue-500">
+                    <div className="text-sm mt-2 text-black">
                       {dayEvent.title}
                     </div>
                   )}
