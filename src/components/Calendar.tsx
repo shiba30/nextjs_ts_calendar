@@ -119,7 +119,7 @@ export const Calendar = () => {
                 <div
                   key={index}
                   className={`text-left p-2 rounded bg-white max-w-[160px] min-h-[85px] ${
-                    isToday(day) ? "bg-green-400" : "text-gray-500"
+                    isToday(day) ? "bg-blue-400" : "text-gray-500"
                   }`}
                   onClick={() => openModal(dayStr)} // クリックしたらモーダルを開く
                 >
@@ -141,7 +141,7 @@ export const Calendar = () => {
                 <div
                   key={index}
                   className={`text-left p-2 rounded bg-white max-w-[160px] min-h-[500px] ${
-                    isToday(day) ? "bg-green-400" : "text-gray-500"
+                    isToday(day) ? "bg-blue-400" : "text-gray-500"
                   }`}
                   onClick={() => openModal(dayStr)}
                 >
